@@ -1,3 +1,3 @@
 # Blue-Decision-PlatForm
 
-## Decision Platform Dasboard and API Endpoints
+## Decision Platform Dashboard and API Endpoints
