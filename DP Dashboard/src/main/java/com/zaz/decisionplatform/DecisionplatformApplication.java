@@ -13,10 +13,10 @@ public class DecisionplatformApplication {
         wpAPIHandler handler = new wpAPIHandler();
 //        handler.getSensors();
 //        handler.getDailyCountyReadingsByCounty("Turkana");
-//        handler.getDailySensoReadingsBySiteId("5691533");
-//        handler.getDailyReadingsBySiteId("5691533");
-        handler.getSiteDetails("5691533");
-        handler.getSitesSummary();
+//        handler.getDailySensoReadingsBySiteId("10388433");
+//        handler.getDailyReadingsBySiteId("10388433");
+//        handler.getSiteDetails("10388433");
+//        handler.getSitesSummary();
     }
 
 }
