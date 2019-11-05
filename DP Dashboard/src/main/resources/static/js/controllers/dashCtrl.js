@@ -51,7 +51,7 @@ function handleResponse(data) {
 }
 
 function loadDevices(data) {
-    
+
     var respObject = data.data;
     var locations = [];
     var tempLocation = [];
