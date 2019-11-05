@@ -71,7 +71,6 @@ function reqFN(dataToSubmit, url, type){
             console.log(err.Message);
         }
     });
-
 }
 
 function processWLMData(data) {

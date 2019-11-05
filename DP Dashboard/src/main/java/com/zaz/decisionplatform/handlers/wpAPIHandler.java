@@ -10,38 +10,32 @@ import java.util.Arrays;
 
 public class wpAPIHandler {
 
-    public void getSensors(){
-        JsonArray sensors = reqProcessor("sensors").get("data").getAsJsonArray();
-        System.out.println(sensors.get(0));
+    public JsonObject getSensors(){
+        return reqProcessor("");
     }
 
     public void getDailyCountyReadingsByCounty(String county){
-        JsonArray data = reqProcessor(String.format("%s%s", "sensors/daily-county-readings/", county)).get("data").getAsJsonArray();
-        System.out.println(data.get(0));
+        JsonArray data = reqProcessor(String.format("%s%s", "/daily-county-readings/", county)).get("data").getAsJsonArray();
     }
 
     public void getDailySensoReadingsBySiteId(String siteId){
-        JsonArray data = reqProcessor(String.format("%s%s", "sensors/daily-readings/", siteId)).get("data").getAsJsonArray();
-        System.out.println(data.get(0));
+        JsonArray data = reqProcessor(String.format("%s%s", "/daily-readings/", siteId)).get("data").getAsJsonArray();
     }
 
     public void getDailyReadingsBySiteId(String siteId){
-        JsonArray data = reqProcessor(String.format("%s%s", "sensors/readings/", siteId)).get("data").getAsJsonArray();
-        System.out.println(data.get(0));
+        JsonArray data = reqProcessor(String.format("%s%s", "/readings/", siteId)).get("data").getAsJsonArray();
     }
 
     public void getSiteDetails(String siteId){
-        JsonObject data = reqProcessor(String.format("%s%s", "sensors/site/", siteId)).get("data").getAsJsonObject();
-        System.out.println(data);
+        JsonObject data = reqProcessor(String.format("%s%s", "/site/", siteId)).get("data").getAsJsonObject();
     }
 
     public void getSitesSummary(){
-        JsonObject data = reqProcessor("sensors/sites/summary").get("data").getAsJsonObject();
-        System.out.println(data);
+        JsonObject data = reqProcessor("/sites/summary").get("data").getAsJsonObject();
     }
 
     private static JsonObject reqProcessor(String endPoint){
-        String ResourceUrl = "https://waterpoint-engine-challenge-dev.mybluemix.net/" + endPoint;
+        String ResourceUrl = "https://waterpoint-engine-challenge-dev.mybluemix.net/sensors" + endPoint;
 
         System.out.println(ResourceUrl);
 
@@ -52,6 +46,7 @@ public class wpAPIHandler {
 
         ResponseEntity<String> response = restTemplate.exchange(ResourceUrl, HttpMethod.GET, entity, String.class);
         System.out.println(response.getStatusCode());
+//        System.out.println(response.getBody());
         return new JsonParser().parse(response.getBody()).getAsJsonObject();
 
     }
