@@ -14,24 +14,24 @@ public class wpAPIHandler {
         return reqProcessor("");
     }
 
-    public void getDailyCountyReadingsByCounty(String county){
-        JsonArray data = reqProcessor(String.format("%s%s", "/daily-county-readings/", county)).get("data").getAsJsonArray();
+    public JsonObject getDailyReadingsByCounty(String county){
+         return reqProcessor(String.format("%s%s", "/daily-county-readings/", county));
     }
 
-    public void getDailySensoReadingsBySiteId(String siteId){
-        JsonArray data = reqProcessor(String.format("%s%s", "/daily-readings/", siteId)).get("data").getAsJsonArray();
-    }
-
-    public void getDailyReadingsBySiteId(String siteId){
+    public void getDailySensorReadingsBySiteId(String siteId){
         JsonArray data = reqProcessor(String.format("%s%s", "/readings/", siteId)).get("data").getAsJsonArray();
     }
 
-    public void getSiteDetails(String siteId){
-        JsonObject data = reqProcessor(String.format("%s%s", "/site/", siteId)).get("data").getAsJsonObject();
+    public JsonObject getDailyReadingsBySiteId(String siteId){
+        return reqProcessor(String.format("%s%s", "/daily-readings/", siteId));
     }
 
-    public void getSitesSummary(){
-        JsonObject data = reqProcessor("/sites/summary").get("data").getAsJsonObject();
+    public JsonObject getSiteDetails(String siteId){
+        return reqProcessor(String.format("%s%s", "/site/", siteId));
+    }
+
+    public JsonObject getSitesSummary(){
+        return reqProcessor("/sites/summary");
     }
 
     private static JsonObject reqProcessor(String endPoint){
