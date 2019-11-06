@@ -3,15 +3,17 @@ var dcrUrl = "/dailycountyreadings/";
 var drsUrl = "/dailyreadings/";
 var sdUrl = "/sitedetails/";
 var ssUrl = "/getSitesSummary/";
+var scUrl = "/status-changes/";
 
 var markers = [];
 
 $(document).ready(function () {
-    getSensors();
+    // getSensors();
     // getDCR("Marsabit");
     // getDRS("674960");
     // getSD("674960");
-    // getSS();
+    getSS();
+    getSC("day", 1);
 });
 
 function initMap() {
@@ -24,6 +26,8 @@ function initMap() {
         center: new google.maps.LatLng(2.337443, 37.991098),
         mapTypeId: google.maps.MapTypeId.HYBRID
     });
+
+    getSensors();
 }
 
 function getSensors() {
@@ -43,11 +47,53 @@ function getSD(siteid) {
 }
 
 function getSS() {
-    reqFN("", ssUrl, "get").done(handleResponse)
+    reqFN("", ssUrl, "get").done(updateYield)
 }
 
+function getSC(tp, nc) {
+    reqFN("", scUrl.concat(tp, "/cycles/", nc), "get").done(updateStatus)
+}
+
+
 function handleResponse(data) {
+    // console.log(data);
+}
+
+function updateYield(data) {
+    document.getElementById("hy").textContent = data.data.yield_daily.high_yield_daily_count;
+    document.getElementById("my").textContent = data.data.yield_daily.medium_yield_daily_count;
+    document.getElementById("ly").textContent = data.data.yield_daily.low_yield_daily_count;
+    document.getElementById("zy").textContent = data.data.yield_daily.zero_yield_daily_count;
+}
+
+function updateStatus(data) {
+
+    var nu = 0, lu = 0, sd = 0, xu = 0, r = 0, o = 0;
+
     console.log(data);
+    for (var i = 0; i < data.data.length; i++) {
+        if (data.data[i].lastStatusId == 1){
+            ++nu;
+        } else if (data.data[i].lastStatusId == 2){
+            ++lu;
+        } else if (data.data[i].lastStatusId == 3){
+            ++xu;
+        } else if (data.data[i].lastStatusId == 4){
+            ++o;
+        } else if (data.data[i].lastStatusId == 5){
+            ++r;
+        } else if (data.data[i].lastStatusId == 6){
+            ++sd;
+        }
+    }
+
+    document.getElementById("nu").textContent = nu.toString();
+    document.getElementById("lu").textContent = lu.toString();
+    document.getElementById("sd").textContent = sd.toString();
+    document.getElementById("r").textContent = r.toString();
+    document.getElementById("o").textContent = o.toString();
+    document.getElementById("xu").textContent = xu.toString();
+
 }
 
 function loadDevices(data) {
@@ -96,34 +142,30 @@ function loadDevices(data) {
 
     for (i = 0; i < locations.length; i++) {
 
-        if (respObject[i].status == "DUE"){
-
+        if (respObject[i].yield_rate <= 15){
+            // console.log(respObject[i].yield_rate);
             marker = new google.maps.Marker({
-                position: new google.maps.LatLng(respObject[i].latt, respObject[i].long),
+                position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
                 map: map,
-                icon: pinSymbol('orange')
+                icon: pinSymbol('#fc5603')
             });
-
-        } else if(respObject[i].status == "DISCONNECTED"){
-
+        } else if(respObject[i].yield_rate > 15 && respObject[i].yield_rate <= 50){
             marker = new google.maps.Marker({
-                position: new google.maps.LatLng(respObject[i].latt, respObject[i].long),
+                position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
                 map: map,
-                icon: pinSymbol('red')
+                icon: pinSymbol('#fcdb03')
             });
-
-        } else if (respObject[i].status == "PAID"){
-
+        } else if (respObject[i].yield_rate > 50 && respObject[i].yield_rate < 100){
             marker = new google.maps.Marker({
-                position: new google.maps.LatLng(respObject[i].latt, respObject[i].long),
+                position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
                 map: map,
-                icon: pinSymbol('#7CFC00')
+                icon: pinSymbol('#6bfc03')
             });
         } else {
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
                 map: map,
-                icon: pinSymbol('#0055FF')
+                icon: pinSymbol('#0388fc')
             });
         }
 
@@ -197,6 +239,6 @@ function pinSymbol(color) {
         fillOpacity: 1,
         strokeColor: '#000',
         strokeWeight: 2,
-        scale: 1
+        scale: 0.6
     };
 }

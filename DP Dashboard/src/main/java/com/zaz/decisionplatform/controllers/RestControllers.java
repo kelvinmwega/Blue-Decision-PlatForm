@@ -44,4 +44,11 @@ public class RestControllers {
         JsonObject resp = apiHandler.getSiteDetails(siteid);
         return new ResponseEntity<>(resp.toString(), HttpStatus.OK);
     }
+
+    @CrossOrigin
+    @RequestMapping(value = "/status-changes/{timePeriod}/cycles/{noOfCycles}", method = RequestMethod.GET)
+    public ResponseEntity<String> getSD(@PathVariable() String timePeriod, @PathVariable() String noOfCycles) {
+        JsonObject resp = apiHandler.getSitesStatusChanges(timePeriod, noOfCycles);
+        return new ResponseEntity<>(resp.toString(), HttpStatus.OK);
+    }
 }

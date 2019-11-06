@@ -34,6 +34,10 @@ public class wpAPIHandler {
         return reqProcessor("/sites/summary");
     }
 
+    public JsonObject getSitesStatusChanges(String timePeriod, String numberOfCycles){
+        return reqProcessor(String.format("%s%s%s%s", "/status-changes/period/", timePeriod, "/cycles/", numberOfCycles));
+    }
+
     private static JsonObject reqProcessor(String endPoint){
         String ResourceUrl = "https://waterpoint-engine-challenge-dev.mybluemix.net/sensors" + endPoint;
 
