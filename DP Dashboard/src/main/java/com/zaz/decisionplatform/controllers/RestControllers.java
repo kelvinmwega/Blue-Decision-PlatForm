@@ -34,7 +34,6 @@ public class RestControllers {
     @CrossOrigin
     @RequestMapping(value = "/dailyreadings/{siteid}", method = RequestMethod.GET)
     public ResponseEntity<String> getDRS(@PathVariable() String siteid) {
-        System.out.println(siteid);
         JsonObject resp = apiHandler.getDailyReadingsBySiteId(siteid);
         return new ResponseEntity<>(resp.toString(), HttpStatus.OK);
     }
@@ -42,7 +41,6 @@ public class RestControllers {
     @CrossOrigin
     @RequestMapping(value = "/sitedetails/{siteid}", method = RequestMethod.GET)
     public ResponseEntity<String> getSD(@PathVariable() String siteid) {
-        System.out.println(siteid);
         JsonObject resp = apiHandler.getSiteDetails(siteid);
         return new ResponseEntity<>(resp.toString(), HttpStatus.OK);
     }

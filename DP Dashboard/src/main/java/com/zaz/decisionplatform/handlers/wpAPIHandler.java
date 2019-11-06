@@ -46,7 +46,7 @@ public class wpAPIHandler {
 
         ResponseEntity<String> response = restTemplate.exchange(ResourceUrl, HttpMethod.GET, entity, String.class);
         System.out.println(response.getStatusCode());
-//        System.out.println(response.getBody());
+
         return new JsonParser().parse(response.getBody()).getAsJsonObject();
 
     }
