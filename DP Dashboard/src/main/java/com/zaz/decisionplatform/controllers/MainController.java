@@ -1,8 +1,11 @@
 package com.zaz.decisionplatform.controllers;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.zaz.decisionplatform.beans.ICounty;
 import com.zaz.decisionplatform.beans.User;
 import com.zaz.decisionplatform.beans.userRegStatus;
+import com.zaz.decisionplatform.handlers.wpAPIHandler;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,11 +13,26 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 @Controller
 public class MainController {
+
+    private wpAPIHandler apiHandler = new wpAPIHandler();
+
     @GetMapping("/")
     public String dashboard() {
         return "dashboard";
+    }
+
+    @GetMapping("analytics")
+    public String analytics(Model model) {
+        model.addAttribute("county", new ICounty());
+
+        List<ICounty> coun = apiHandler.getSensorsArray();
+
+        model.addAttribute("county", coun);
+        return "analytics";
     }
 
     @GetMapping("login")

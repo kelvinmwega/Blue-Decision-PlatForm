@@ -8,7 +8,7 @@ var scUrl = "/status-changes/";
 var markers = [];
 
 $(document).ready(function () {
-    // getSensors();
+    getSensors();
     // getDCR("Marsabit");
     // getDRS("674960");
     // getSD("674960");
@@ -56,7 +56,7 @@ function getSC(tp, nc) {
 
 
 function handleResponse(data) {
-    // console.log(data);
+    console.log(data);
 }
 
 function updateYield(data) {

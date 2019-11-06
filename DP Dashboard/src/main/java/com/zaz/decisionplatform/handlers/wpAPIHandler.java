@@ -3,15 +3,36 @@ package com.zaz.decisionplatform.handlers;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.zaz.decisionplatform.beans.ICounty;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class wpAPIHandler {
 
-    public JsonObject getSensors(){
+    public JsonObject    getSensors(){
         return reqProcessor("");
+    }
+
+    public List<ICounty> getSensorsArray(){
+        List<ICounty> coun = new ArrayList<>();
+
+        try {
+            JsonArray resp = reqProcessor("").get("data").getAsJsonArray();
+            for (int i = 0; i < resp.size(); i++){
+                ICounty county = new ICounty();
+                county.setMwater_id(resp.get(i).getAsJsonObject().get("mwater_id").getAsString());
+                county.setCounty(resp.get(i).getAsJsonObject().get("site_name").getAsString());
+                coun.add(county);
+            }
+        } catch (Exception e){
+
+        }
+
+        return coun;
     }
 
     public JsonObject getDailyReadingsByCounty(String county){
