@@ -41,6 +41,8 @@
     "kinvey-flex-sdk": "^3.3.0",
     "pg": "^7.12.1",
     "reflect-metadata": "^0.1.13",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.8",
     "swagger-ui-express": "^4.1.1",
     "tsc-watch": "^4.0.0",
     "typeorm": "^0.2.19",
