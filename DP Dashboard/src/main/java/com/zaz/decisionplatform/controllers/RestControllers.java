@@ -37,8 +37,6 @@ public class RestControllers {
     @CrossOrigin
     @RequestMapping(value = "/getSitesSummaryCounty/{county}",  method = RequestMethod.GET)
     public ResponseEntity<String> getSitesSummaryCounty(@PathVariable() String county){
-
-        System.out.println(county);
         JsonObject summary = apiHandler.getSitesStatusChanges("day", "1");
         JsonArray resp = new JsonArray();
 

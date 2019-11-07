@@ -168,9 +168,9 @@ function activeHours(labelsArray, dataArray) {
                 borderColor: c2
             }],
             labels: labelsArray
-        }
+        },
+        options: donutOption
     });
-    
 }
 
 function sensor_uptimes(labelsArray, dataArray) {
@@ -188,7 +188,8 @@ function sensor_uptimes(labelsArray, dataArray) {
                 borderColor: c2
             }],
             labels: labelsArray
-        }
+        },
+        options: donutOption
     });
 }
 
@@ -207,7 +208,8 @@ function site_uptimes(labelsArray, dataArray) {
                 borderColor: c2
             }],
             labels: labelsArray
-        }
+        },
+        options: donutOption
     });
 }
 
@@ -226,7 +228,8 @@ function yield_daily(labelsArray, dataArray) {
                 borderColor: c2
             }],
             labels: labelsArray
-        }
+        },
+        options: donutOption
     });
 }
 
@@ -306,6 +309,13 @@ var chartOptions = {
         point: {
             pointStyle: 'circle',
         }
+    },
+    responsive: true
+};
+
+var donutOption = {
+    legend: {
+        display: true
     },
     responsive: true
 };
