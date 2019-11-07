@@ -21,18 +21,34 @@ public class MainController {
     private wpAPIHandler apiHandler = new wpAPIHandler();
 
     @GetMapping("/")
-    public String dashboard() {
-        return "dashboard";
+    public String dashboard(Authentication authentication) {
+
+        System.out.println(authentication.getPrincipal());
+        if (authentication.getName().equals("user@email.com")) {
+            return "clientDash";
+        } else {
+            return "dashboard";
+        }
     }
 
     @GetMapping("analytics")
-    public String analytics(Model model) {
-        model.addAttribute("county", new ICounty());
+    public String analytics(Model model, Authentication authentication) {
 
-        List<ICounty> coun = apiHandler.getSensorsArray();
+        if (authentication.getName().equals("user@email.com")) {
+            return "clientAnalytics";
+        } else {
+            model.addAttribute("county", new ICounty());
 
-        model.addAttribute("county", coun);
-        return "analytics";
+            List<ICounty> coun = apiHandler.getSensorsArray();
+
+            model.addAttribute("county", coun);
+            return "analytics";
+        }
+    }
+
+    @GetMapping("client-analytics")
+    public String clientanalytics(Model model) {
+        return "clientAnalytics";
     }
 
     @GetMapping("login")
