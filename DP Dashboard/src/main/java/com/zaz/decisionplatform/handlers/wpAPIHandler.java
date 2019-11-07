@@ -13,7 +13,7 @@ import java.util.List;
 
 public class wpAPIHandler {
 
-    public JsonObject    getSensors(){
+    public JsonObject getSensors(){
         return reqProcessor("");
     }
 
@@ -34,6 +34,44 @@ public class wpAPIHandler {
 
         return coun;
     }
+
+    public List<ICounty> getSensorsCountyArray(String siteid){
+        List<ICounty> coun = new ArrayList<>();
+
+        try {
+            JsonArray resp = reqProcessor("").get("data").getAsJsonArray();
+            for (int i = 0; i < resp.size(); i++){
+                if (resp.get(i).getAsJsonObject().get("county").getAsString().equals(siteid)){
+                    ICounty county = new ICounty();
+                    county.setMwater_id(resp.get(i).getAsJsonObject().get("mwater_id").getAsString());
+                    county.setCounty(resp.get(i).getAsJsonObject().get("site_name").getAsString());
+                    coun.add(county);
+                }
+            }
+        } catch (Exception e){
+
+        }
+
+        return coun;
+    }
+
+    public JsonArray getSensorsCounArray(String siteid){
+        JsonArray coun = new JsonArray();
+
+        try {
+            JsonArray resp = reqProcessor("").get("data").getAsJsonArray();
+            for (int i = 0; i < resp.size(); i++){
+                if (resp.get(i).getAsJsonObject().get("county").getAsString().equals(siteid)){
+                    coun.add(resp.get(i).getAsJsonObject());
+                }
+            }
+        } catch (Exception e){
+
+        }
+
+        return coun;
+    }
+
 
     public JsonObject getDailyReadingsByCounty(String county){
          return reqProcessor(String.format("%s%s", "/daily-county-readings/", county));

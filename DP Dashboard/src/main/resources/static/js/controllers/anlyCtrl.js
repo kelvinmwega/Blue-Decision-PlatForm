@@ -7,6 +7,24 @@ var scUrl = "/status-changes/";
 
 var siteDataChart, active_hoursChart, sensor_uptimesChart, site_uptimesChart, yield_dailyChart;
 
+var c1 =  [
+    'rgba(255, 99, 132, 0.2)',
+    'rgba(54, 162, 235, 0.2)',
+    'rgba(255, 206, 86, 0.2)',
+    'rgba(153, 102, 255, 0.2)',
+    'rgba(75, 192, 192, 0.2)',
+    'rgba(255, 159, 64, 0.2)'
+];
+
+var c2 = [
+    'rgba(255, 99, 132, 1)',
+    'rgba(54, 162, 235, 1)',
+    'rgba(255, 206, 86, 1)',
+    'rgba(153, 102, 255, 1)',
+    'rgba(75, 192, 192, 1)',
+    'rgba(255, 159, 64, 1)'
+];
+
 $(document).ready(function () {
     // getSensors();
     // getDCR("Marsabit");
@@ -106,7 +124,6 @@ function processSummary(data) {
     }
 
     yield_daily(labelsArray, dataArray);
-
 }
 
 function procSiteData(data) {
@@ -146,7 +163,9 @@ function activeHours(labelsArray, dataArray) {
         type: 'doughnut',
         data: {
             datasets: [{
-                data: dataArray
+                data: dataArray,
+                backgroundColor: c1,
+                borderColor: c2
             }],
             labels: labelsArray
         }
@@ -164,7 +183,9 @@ function sensor_uptimes(labelsArray, dataArray) {
         type: 'doughnut',
         data: {
             datasets: [{
-                data: dataArray
+                data: dataArray,
+                backgroundColor: c1,
+                borderColor: c2
             }],
             labels: labelsArray
         }
@@ -181,7 +202,9 @@ function site_uptimes(labelsArray, dataArray) {
         type: 'doughnut',
         data: {
             datasets: [{
-                data: dataArray
+                data: dataArray,
+                backgroundColor: c1,
+                borderColor: c2
             }],
             labels: labelsArray
         }
@@ -198,7 +221,9 @@ function yield_daily(labelsArray, dataArray) {
         type: 'doughnut',
         data: {
             datasets: [{
-                data: dataArray
+                data: dataArray,
+                backgroundColor: c1,
+                borderColor: c2
             }],
             labels: labelsArray
         }
@@ -219,7 +244,7 @@ function loadSiteDat(labelsArray, yieldArray){
             datasets: [{
                 label: 'Yield',
                 data: yieldArray,
-                backgroundColor: "rgba(65, 93, 104, 1)"
+                backgroundColor: "rgba(54, 162, 235, 1)"
             }]
         },
         options: chartOptions

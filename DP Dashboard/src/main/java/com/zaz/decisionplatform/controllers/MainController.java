@@ -23,7 +23,6 @@ public class MainController {
     @GetMapping("/")
     public String dashboard(Authentication authentication) {
 
-        System.out.println(authentication.getPrincipal());
         if (authentication.getName().equals("user@email.com")) {
             return "clientDash";
         } else {
@@ -35,12 +34,13 @@ public class MainController {
     public String analytics(Model model, Authentication authentication) {
 
         if (authentication.getName().equals("user@email.com")) {
+            model.addAttribute("county", new ICounty());
+            List<ICounty> coun = apiHandler.getSensorsCountyArray("Wajir");
+            model.addAttribute("county", coun);
             return "clientAnalytics";
         } else {
             model.addAttribute("county", new ICounty());
-
             List<ICounty> coun = apiHandler.getSensorsArray();
-
             model.addAttribute("county", coun);
             return "analytics";
         }

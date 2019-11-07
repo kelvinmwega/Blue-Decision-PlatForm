@@ -11,9 +11,74 @@
 
 <div th:replace="fragments/header-list :: header-list"/>
 
-
+<!-- Start Sale Statistic area-->
+<div class="sale-statistic-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9 col-md-8 col-sm-7 col-xs-12">
+                <div class="sale-statistic-inner notika-shadow mg-tb-30">
+                    <div class="curved-inner-pro">
+                        <div class="curved-ctn">
+                            <h2>Water Points</h2>
+                            <p>Location Map of all the water points in the county</p>
+                        </div>
+                    </div>
+                    <div id="googleMap" class="flot-chart-sts flot-chart" style="width:100%;height:360px;"></div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                <div class="statistic-right-area notika-shadow mg-tb-30 sm-res-mg-t-0">
+                    <div class="past-day-statis">
+                        <h2>Site Status</h2>
+                        <p>Overview of Selected Site</p>
+                    </div>
+                    <div class="past-statistic-an">
+                        <div class="past-statistic-ctn">
+                            <h3 id="nu"><span class="counter">0</span></h3>
+                            <p>Normal Use</p>
+                        </div>
+                    </div>
+                    <div class="past-statistic-an">
+                        <div class="past-statistic-ctn">
+                            <h3 id="lu"><span class="counter">0</span></h3>
+                            <p>Low Use</p>
+                        </div>
+                    </div>
+                    <div class="past-statistic-an">
+                        <div class="past-statistic-ctn">
+                            <h3 id="sd"><span class="counter">0</span></h3>
+                            <p>Seasonal Disuse</p>
+                        </div>
+                    </div>
+                    <div class="past-statistic-an">
+                        <div class="past-statistic-ctn">
+                            <h3 id="xu"><span class="counter">0</span></h3>
+                            <p>No Use</p>
+                        </div>
+                    </div>
+                    <div class="past-statistic-an">
+                        <div class="past-statistic-ctn">
+                            <h3 id="r"><span class="counter">0</span></h3>
+                            <p>Repair</p>
+                        </div>
+                    </div>
+                    <div class="past-statistic-an">
+                        <div class="past-statistic-ctn">
+                            <h3 id="o"><span class="counter">0</span></h3>
+                            <p>Offline</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Sale Statistic area-->
 
 <div th:replace="fragments/footer :: footer"/>
+
+<script th:src="@{js/controllers/cDashCtrl.js}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIXEnt978JczAkDOVWLpYdjAA-1nkQhWk&callback=initMap" async defer></script>
 
 </body>
 </html>

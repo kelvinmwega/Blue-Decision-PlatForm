@@ -11,9 +11,81 @@
 
 <div th:replace="fragments/header-list :: header-list"/>
 
+<div class="datepicker-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <form id="sss">
+                    <div class="datepicker-int mg-t-30 text-center">
+                        <div class="cmp-tb-hd">
+                            <h2>County Daily Yield</h2>
+                            <p>View Historical County Daily Yield</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group nk-datapk-ctm form-elet-mg text-center">
 
+                                    <div class="bootstrap-select fm-cmp-mg">
+                                        <select id="coun" onchange="loadSiteData();" class="devicepicker" th:field="*{county}">
+                                            <option th:each="coun : ${county}"
+                                                    th:value="${coun.mwater_id}"
+                                                    th:text="${coun.county}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <p id="status"></p>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                                <div class="website-traffic-ctn text-center">
+                                    <div class="form-group nk-datapk-ctm form-elet-mg">
+                                        <p id="households"></p>
+                                        <p id="activeHours"></p>
+                                        <p id="sensors"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                                <div class="website-traffic-ctn text-center">
+                                    <div class="form-group nk-datapk-ctm form-elet-mg">
+                                        <p id="yieldDaily"></p>
+                                        <p id="localDate"></p>
+                                        <p id="yield_rate"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="sale-statistic-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="sale-statistic-inner notika-shadow mg-tb-30">
+                    <div class="curved-inner-pro">
+                        <div class="curved-ctn">
+                            <h2>County Data</h2>
+                            <p>Daily data for County </p>
+                        </div>
+                    </div>
+                    <div class="line-chart-wp sm-res-mg-t-30 chart-display-nn">
+                        <canvas id="siteDataChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div th:replace="fragments/footer :: footer"/>
+
+<script th:src="@{js/charts/Chart.js}"></script>
+<script th:src="@{js/controllers/cAnlyCtrl.js}"></script>
 
 </body>
 </html>
