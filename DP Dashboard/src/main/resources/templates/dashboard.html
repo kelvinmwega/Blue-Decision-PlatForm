@@ -60,7 +60,7 @@
                 <div class="sale-statistic-inner notika-shadow mg-tb-30">
                     <div class="curved-inner-pro">
                         <div class="curved-ctn">
-                            <h2>Water Points</h2>
+                            <h2>Country Water Points Dashboard</h2>
                             <p>Location Map of all the water points in the country</p>
                         </div>
                     </div>
@@ -75,37 +75,37 @@
                     </div>
                     <div class="past-statistic-an">
                         <div class="past-statistic-ctn">
-                            <h3 id="nu"><span class="counter">0</span></h3>
+                            <h3 id="nu" style="color:#0388fc"><span class="counter">0</span></h3>
                             <p>Normal Use</p>
                         </div>
                     </div>
                     <div class="past-statistic-an">
                         <div class="past-statistic-ctn">
-                            <h3 id="lu"><span class="counter">0</span></h3>
+                            <h3 id="lu" style="color:#42f5d1"><span class="counter">0</span></h3>
                             <p>Low Use</p>
                         </div>
                     </div>
                     <div class="past-statistic-an">
                         <div class="past-statistic-ctn">
-                            <h3 id="sd"><span class="counter">0</span></h3>
+                            <h3 id="sd" style="color:#5af542"><span class="counter">0</span></h3>
                             <p>Seasonal Disuse</p>
                         </div>
                     </div>
                     <div class="past-statistic-an">
                         <div class="past-statistic-ctn">
-                            <h3 id="xu"><span class="counter">0</span></h3>
+                            <h3 id="xu" style="color:#f54242"><span class="counter">0</span></h3>
                             <p>No Use</p>
                         </div>
                     </div>
                     <div class="past-statistic-an">
                         <div class="past-statistic-ctn">
-                            <h3 id="r"><span class="counter">0</span></h3>
+                            <h3 id="r" style="color:#e6f542"><span class="counter">0</span></h3>
                             <p>Repair</p>
                         </div>
                     </div>
                     <div class="past-statistic-an">
                         <div class="past-statistic-ctn">
-                            <h3 id="o"><span class="counter">0</span></h3>
+                            <h3 id="o" style="color:#f59e42"><span class="counter">0</span></h3>
                             <p>Offline</p>
                         </div>
                     </div>
@@ -117,7 +117,7 @@
 <!-- End Sale Statistic area-->
 
 <div th:replace="fragments/footer :: footer"/>
-
+<script th:src="@{js/controllers/common.js}"></script>
 <script th:src="@{js/controllers/dashCtrl.js}"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIXEnt978JczAkDOVWLpYdjAA-1nkQhWk&callback=initMap" async defer></script>
 

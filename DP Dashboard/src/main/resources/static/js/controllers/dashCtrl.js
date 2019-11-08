@@ -5,20 +5,9 @@ var sdUrl = "/sitedetails/";
 var ssUrl = "/getSitesSummary/";
 var scUrl = "/status-changes/";
 
-var nFrom = "top";
-var nAlign = "right";
-var nIcons = "";
-var nType = "info";
-var nAnimIn = "animated fadeInRight";
-var nAnimOut = "animated fadeOutUp";
-
 var markers = [];
 
 $(document).ready(function () {
-    // getSensors();
-    // getDCR("Marsabit");
-    // getDRS("674960");
-    // getSD("674960");
     getSS();
     getSC("day", 1);
 });
@@ -38,18 +27,6 @@ function initMap() {
     notify(nFrom, nAlign, nIcons, nType, nAnimIn, nAnimOut, "Welcome : ", "Collecting Data...");
 }
 
-function getSensors() {
-    reqFN("", sensorsURL, "get").done(loadDevices);
-}
-
-function getDCR(county){
-    reqFN("", dcrUrl.concat(county), "get").done(handleResponse)
-}
-
-function getDRS(siteid) {
-    reqFN("", drsUrl.concat(siteid), "get").done(handleResponse)
-}
-
 function getSD(siteid) {
     reqFN("", sdUrl.concat(siteid), "get").done(handleResponse)
 }
@@ -59,12 +36,12 @@ function getSS() {
 }
 
 function getSC(tp, nc) {
-    reqFN("", scUrl.concat(tp, "/cycles/", nc), "get").done(updateStatus)
+    reqFN("", scUrl.concat(tp, "/cycles/", nc), "get").done()
 }
 
 
 function handleResponse(data) {
-    console.log(data);
+    // console.log(data);
 }
 
 function updateYield(data) {
@@ -84,18 +61,15 @@ function updateYield(data) {
     loadDevices(data);
 }
 
-function updateStatus(data) {
-
-}
 
 function loadDevices(data) {
-    console.log(data);
+    // console.log(data);
     var respObject = data.data.sites;
     var locations = [];
     var tempLocation = [];
     var i = 0;
 
-    console.log(respObject);
+    // console.log(respObject);
     for (var key in respObject) {
         if (respObject.hasOwnProperty(key)) {
 
@@ -136,30 +110,42 @@ function loadDevices(data) {
     for (i = 0; i < locations.length; i++) {
 
         // console.log(respObject[i]);
-        if (respObject[i].status_id == 1){
+        if (respObject[i].status_id == 1){ // normal use 0388fc
             // console.log(respObject[i].yield_rate);
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
                 map: map,
-                icon: pinSymbol('#fc5603')
-            });
-        } else if(respObject[i].status_id == 2){
-            marker = new google.maps.Marker({
-                position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
-                map: map,
-                icon: pinSymbol('#fcdb03')
-            });
-        } else if (respObject[i].status_id ==3){
-            marker = new google.maps.Marker({
-                position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
-                map: map,
-                icon: pinSymbol('#6bfc03')
-            });
-        } else {
-            marker = new google.maps.Marker({
-                position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
-                map: map,
                 icon: pinSymbol('#0388fc')
+            });
+        } else if(respObject[i].status_id == 2){ //low use 6bfc03
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
+                map: map,
+                icon: pinSymbol('#42f5d1')
+            });
+        } else if (respObject[i].status_id == 3){ // seasonal disuse
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
+                map: map,
+                icon: pinSymbol('#5af542')
+            });
+        } else if (respObject[i].status_id == 4){ //repair
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
+                map: map,
+                icon: pinSymbol('#e6f542')
+            });
+        } else if (respObject[i].status_id == 5){ //offline
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
+                map: map,
+                icon: pinSymbol('#f59e42')
+            });
+        } else { // no use fc5603
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
+                map: map,
+                icon: pinSymbol('#f54242')
             });
         }
 
@@ -177,106 +163,3 @@ function loadDevices(data) {
     notify(nFrom, nAlign, nIcons, "success", nAnimIn, nAnimOut, "Notification : ", "Data Collected Successfully...");
 }
 
-function reqFN(dataToSubmit, url, type){
-    return $.ajax({
-        url : url,
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        data : JSON.stringify(dataToSubmit),
-        type : type,
-        contentType: "application/json",
-        dataType : "json",
-        cache : false,
-        success : function(data){
-            //console.log(data);
-        },
-        error : function(xhr, status, error){
-            var err = eval("(" + xhr.responseText + ")");
-            console.log(err.Message);
-        }
-    });
-}
-
-function clickroute(latt, longt, id) { //just omit the 'lati' and 'long'
-    var latLng = new google.maps.LatLng(latt, longt);
-    // map.panTo(latLng);
-    getSD(id);
-}
-
-function DeleteMarkers() {
-    //Loop through all the markers and remove
-    for (var i = 0; i < markers.length; i++) {
-        markers[i].setMap(null);
-    }
-    markers = [];
-}
-
-function replaceAll(find, replace, str)
-{
-    while( str.indexOf(find) > -1)
-    {
-        str = str.replace(find, replace);
-    }
-    return str;
-}
-
-function sprintf(template, values) {
-    return template.replace(/%s/g, function() {
-        return values.shift();
-    });
-}
-
-function pinSymbol(color) {
-    return {
-        path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z',
-        fillColor: color,
-        fillOpacity: 1,
-        strokeColor: '#000',
-        strokeWeight: 2,
-        scale: 0.6
-    };
-}
-
-function notify(from, align, icon, type, animIn, animOut, title, message){
-    $.growl({
-        icon: icon,
-        title: title,
-        message: message,
-        url: ''
-    },{
-        element: 'body',
-        type: type,
-        allow_dismiss: true,
-        placement: {
-            from: from,
-            align: align
-        },
-        offset: {
-            x: 20,
-            y: 85
-        },
-        spacing: 10,
-        z_index: 1031,
-        delay: 2500,
-        timer: 1000,
-        url_target: '_blank',
-        mouse_over: false,
-        animate: {
-            enter: animIn,
-            exit: animOut
-        },
-        icon_type: 'class',
-        template: '<div data-growl="container" class="alert" role="alert">' +
-            '<button type="button" class="close" data-growl="dismiss">' +
-            '<span aria-hidden="true">&times;</span>' +
-            '<span class="sr-only">Close</span>' +
-            '</button>' +
-            '<span data-growl="icon"></span>' +
-            '<span data-growl="title"></span>' +
-            '<span data-growl="message"></span>' +
-            '<a href="#" data-growl="url"></a>' +
-            '</div>'
-    });
-}

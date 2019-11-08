@@ -2,32 +2,20 @@ var sensorsURL = "/getSensorsCounty/";
 var sdUrl = "/sitedetails/";
 var ssUrl = "/getSitesSummaryCounty/";
 
-var nFrom = "top";
-var nAlign = "right";
-var nIcons = "";
-var nType = "info";
-var nAnimIn = "animated fadeInRight";
-var nAnimOut = "animated fadeOutUp";
-
 var markers = [];
 
 $(document).ready(function () {
-    // getSensors();
-    // getDCR("Marsabit");
-    // getDRS("674960");
-    // getSD("674960");
-    getSS("Wajir");
-    // getSC("day", 1);
+
 });
 
 function initMap() {
-    var myLatLng = new google.maps.LatLng(-1.30931, 36.76971);
+    var myLatLng = new google.maps.LatLng(1.765703, 40.063787);
     var mapProp={
         mapTypeId:google.maps.MapTypeId.HYBRID
     };
     map = new google.maps.Map(document.getElementById('googleMap'), {
-        zoom: 7,
-        center: new google.maps.LatLng(2.337443, 37.991098),
+        zoom: 8,
+        center: new google.maps.LatLng(1.765703, 40.063787),
         mapTypeId: google.maps.MapTypeId.HYBRID
     });
 
@@ -36,15 +24,11 @@ function initMap() {
 }
 
 function getSensors(county) {
-    reqFN("", sensorsURL.concat(county), "get").done(loadDevices);
+    reqFN("", sensorsURL.concat(county), "get").done(loadDevices).done(updateStatus);
 }
 
 function getSD(siteid) {
     reqFN("", sdUrl.concat(siteid), "get").done(handleResponse)
-}
-
-function getSS(county) {
-    reqFN("", ssUrl.concat(county), "get").done(updateStatus)
 }
 
 function handleResponse(data) {
@@ -52,12 +36,13 @@ function handleResponse(data) {
 }
 
 function loadDevices(data) {
-
+    // console.log(data);
     var respObject = data;
     var locations = [];
     var tempLocation = [];
     var i = 0;
 
+    // console.log(respObject);
     for (var key in respObject) {
         if (respObject.hasOwnProperty(key)) {
 
@@ -69,10 +54,10 @@ function loadDevices(data) {
                     '<div id="bodyContent">'+
                     '<p><b>%s</b></p>'+
                     '<p><b>Yield</b> : %s </p>'+
-                    '<p><b>Sensors</b> : %s</p>'+
+                    '<p><b>Bar Code</b> : %s</p>'+
                     '<p><b>ID </b> : %s </p>'+
                     '</div>'+
-                    '</div>', [respObject[i].site_name, respObject[i].yield_rate, respObject[i].sensors.length,
+                    '</div>', [respObject[i].site_name, respObject[i].yield_daily, respObject[i].sensor_barcode,
                     respObject[i].mwater_id]);
 
                 tempLocation.push(contentString);
@@ -81,10 +66,9 @@ function loadDevices(data) {
                 tempLocation.push(i++);
                 tempLocation.push(data[i-1].mwater_id);
                 locations.push(tempLocation);
-
                 tempLocation = [];
             } catch (e) {
-                console.log(e);
+
             }
         }
     }
@@ -94,34 +78,47 @@ function loadDevices(data) {
     var infowindow = new google.maps.InfoWindow();
     var marker, i;
 
-    clickroute(respObject[0].site_lat, respObject[0].site_lon, respObject[0].mwater_id);
+    // clickroute(respObject[0]["site_lat"], respObject[0]["site_lon"], respObject[0]["mwater_id"]);
 
     for (i = 0; i < locations.length; i++) {
 
-        if (respObject[i].yield_rate <= 15){
+        // console.log(respObject[i]);
+        if (respObject[i].status_id == 1){ // normal use 0388fc
             // console.log(respObject[i].yield_rate);
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
                 map: map,
-                icon: pinSymbol('#fc5603')
-            });
-        } else if(respObject[i].yield_rate > 15 && respObject[i].yield_rate <= 50){
-            marker = new google.maps.Marker({
-                position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
-                map: map,
-                icon: pinSymbol('#fcdb03')
-            });
-        } else if (respObject[i].yield_rate > 50 && respObject[i].yield_rate < 100){
-            marker = new google.maps.Marker({
-                position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
-                map: map,
-                icon: pinSymbol('#6bfc03')
-            });
-        } else {
-            marker = new google.maps.Marker({
-                position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
-                map: map,
                 icon: pinSymbol('#0388fc')
+            });
+        } else if(respObject[i].status_id == 2){ //low use 6bfc03
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
+                map: map,
+                icon: pinSymbol('#42f5d1')
+            });
+        } else if (respObject[i].status_id == 3){ // seasonal disuse
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
+                map: map,
+                icon: pinSymbol('#5af542')
+            });
+        } else if (respObject[i].status_id == 4){ //repair
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
+                map: map,
+                icon: pinSymbol('#e6f542')
+            });
+        } else if (respObject[i].status_id == 5){ //offline
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
+                map: map,
+                icon: pinSymbol('#f59e42')
+            });
+        } else { // no use fc5603
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
+                map: map,
+                icon: pinSymbol('#f54242')
             });
         }
 
@@ -143,19 +140,19 @@ function updateStatus(data) {
 
     var nu = 0, lu = 0, sd = 0, xu = 0, r = 0, o = 0;
 
-    console.log(data);
+    // console.log(data);
     for (var i = 0; i < data.length; i++) {
-        if (data[i].lastStatusId == 1){
+        if (data[i].status_id == 1){
             ++nu;
-        } else if (data[i].lastStatusId == 2){
+        } else if (data[i].status_id == 2){
             ++lu;
-        } else if (data[i].lastStatusId == 3){
+        } else if (data[i].status_id == 3){
             ++xu;
-        } else if (data[i].lastStatusId == 4){
+        } else if (data[i].status_id == 4){
             ++o;
-        } else if (data[i].lastStatusId == 5){
+        } else if (data[i].status_id == 5){
             ++r;
-        } else if (data[i].lastStatusId == 6){
+        } else if (data[i].status_id == 6){
             ++sd;
         }
     }
@@ -167,108 +164,4 @@ function updateStatus(data) {
     document.getElementById("o").textContent = o.toString();
     document.getElementById("xu").textContent = xu.toString();
 
-}
-
-function reqFN(dataToSubmit, url, type){
-    return $.ajax({
-        url : url,
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        data : JSON.stringify(dataToSubmit),
-        type : type,
-        contentType: "application/json",
-        dataType : "json",
-        cache : false,
-        success : function(data){
-            //console.log(data);
-        },
-        error : function(xhr, status, error){
-            var err = eval("(" + xhr.responseText + ")");
-            console.log(err.Message);
-        }
-    });
-}
-
-function clickroute(latt, longt, id) { //just omit the 'lati' and 'long'
-    var latLng = new google.maps.LatLng(latt, longt);
-    map.panTo(latLng);
-    getSD(id);
-}
-
-function DeleteMarkers() {
-    //Loop through all the markers and remove
-    for (var i = 0; i < markers.length; i++) {
-        markers[i].setMap(null);
-    }
-    markers = [];
-}
-
-function replaceAll(find, replace, str)
-{
-    while( str.indexOf(find) > -1)
-    {
-        str = str.replace(find, replace);
-    }
-    return str;
-}
-
-function sprintf(template, values) {
-    return template.replace(/%s/g, function() {
-        return values.shift();
-    });
-}
-
-function pinSymbol(color) {
-    return {
-        path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z',
-        fillColor: color,
-        fillOpacity: 1,
-        strokeColor: '#000',
-        strokeWeight: 2,
-        scale: 0.6
-    };
-}
-
-function notify(from, align, icon, type, animIn, animOut, title, message){
-    $.growl({
-        icon: icon,
-        title: title,
-        message: message,
-        url: ''
-    },{
-        element: 'body',
-        type: type,
-        allow_dismiss: true,
-        placement: {
-            from: from,
-            align: align
-        },
-        offset: {
-            x: 20,
-            y: 85
-        },
-        spacing: 10,
-        z_index: 1031,
-        delay: 2500,
-        timer: 1000,
-        url_target: '_blank',
-        mouse_over: false,
-        animate: {
-            enter: animIn,
-            exit: animOut
-        },
-        icon_type: 'class',
-        template: '<div data-growl="container" class="alert" role="alert">' +
-            '<button type="button" class="close" data-growl="dismiss">' +
-            '<span aria-hidden="true">&times;</span>' +
-            '<span class="sr-only">Close</span>' +
-            '</button>' +
-            '<span data-growl="icon"></span>' +
-            '<span data-growl="title"></span>' +
-            '<span data-growl="message"></span>' +
-            '<a href="#" data-growl="url"></a>' +
-            '</div>'
-    });
 }

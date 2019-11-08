@@ -59,7 +59,8 @@ public class wpAPIHandler {
         JsonArray coun = new JsonArray();
 
         try {
-            JsonArray resp = reqProcessor("").get("data").getAsJsonArray();
+            JsonArray resp = reqProcessor("/sites/summary").get("data").getAsJsonObject().get("sites").getAsJsonArray();
+            System.out.println(resp);
             for (int i = 0; i < resp.size(); i++){
                 if (resp.get(i).getAsJsonObject().get("county").getAsString().equals(siteid)){
                     coun.add(resp.get(i).getAsJsonObject());
