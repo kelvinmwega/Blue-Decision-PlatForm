@@ -1,13 +1,45 @@
 {
-    "swagger": "2.0",
-    "info": {
-      "version": "1.0.0"
-    },
-    "host": "localhost:3001",
-    "basePath": "/api/v1",
-    "schemes": ["http"],
-    "produces": ["application/json"],
-    "paths": {
-  
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0"
+  },
+  "host": "localhost:3001",
+  "basePath": "/api",
+  "schemes": ["http"],
+  "produces": ["application/json"],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": [
+          "sites"
+        ],
+        "summary": "Collect Site Status",
+        "description": "Collect Site Status",
+        "operationId": "allsitestatus",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "collectionFormat": "multi"
+        }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "items": {
+
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status value"
+          }
+        },
+        "security": [{
+
+        }]
+      }
     }
   }
+}
