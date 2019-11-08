@@ -2,10 +2,12 @@ import { Request, Response } from "express";
 import logger from '../../utils/logger';
 import { stringify } from "querystring";
 import { GenericController } from "./genericCtrl";
+import { DistanceProvider } from "./provider/distanceProvicer";
+
 
 export default [
   {
-    path: "/api/v1/:repository",
+    path: "/api/",
     method: "get",
     handler: async (req: Request, res: Response) => {
       logger.info(`collecting sensors `);
@@ -26,7 +28,6 @@ export default [
 
       const generic = new GenericController();
       let forecast = await generic.weatherForecast(req.body.lat, req.body.lon);
-      forecast = JSON.parse(forecast.trim());
 
       logger.info(`complete current weather ${forecast.currently.summary}`);
       res.send(forecast);
@@ -34,38 +35,39 @@ export default [
   },
 
   {
-    path: "/api/v1/:repository",
-    method: "post",
-    handler: async (req: Request, res: Response) => {
-      logger.info(`Posting Data To ${req.params.repository}`);
-      res.send(req.body);
-    }
-  },
-
-  {
-    path: "/api/v1/:repository/:id",
+    path: "/api/distance",
     method: "get",
     handler: async (req: Request, res: Response) => {
-      logger.info(`Collecting Data for ${req.params.id} From ${req.params.repository}`);
-      res.send(req.params.id);
+      logger.info(`checking distance ${JSON.stringify(req.body)}`);
+
+      const dist = new DistanceProvider();
+      const distance = await dist.checkDistance(req.body.lat, req.body.lon);
+
+      const resp = {
+        status: "OK",
+        data: distance
+      }
+
+      logger.info(`complete distance`);
+      res.send(resp);
     }
   },
-
   {
-    path: "/api/v1/:repository/:id",
-    method: "put",
+    path: "/api/advisor",
+    method: "get",
     handler: async (req: Request, res: Response) => {
-      logger.info(`Updating Data for ${req.params.id} From ${req.params.repository}`);
-      res.send(req.body);
-    }
-  },
+      logger.info(`checking advisor ${JSON.stringify(req.body)}`);
 
-  {
-    path: "/api/v1/:repository/:id",
-    method: "delete",
-    handler: async (req: Request, res: Response) => {
-      logger.info(`Deleting Data for ${req.params.id} From ${req.params.repository}`);
-      res.send(req.params.id);
+      const advisor = new DistanceProvider();
+      const advice = await advisor.advisor(req.body.lat, req.body.lon);
+
+      const resp = {
+        status: "OK",
+        data: advice
+      }
+
+      logger.info(`complete advisor`);
+      res.send(resp);
     }
   }
 ];

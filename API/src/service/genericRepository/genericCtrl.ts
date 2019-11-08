@@ -8,7 +8,7 @@ export class GenericController {
 
     public allSensors = async () => {
         var options = {
-            uri: "https://waterpoint-engine-challenge-dev.mybluemix.net/sensors",
+            uri: "https://waterpoint-engine-challenge-dev.mybluemix.net/sensors/sites/summary",
             headers: this.headersOpt
         };
 
@@ -21,7 +21,9 @@ export class GenericController {
             headers: this.headersOpt
         };
 
-        return await request.get(options);
+        const forecast = await request.get(options)
+
+        return JSON.parse(forecast.trim());
     }
 
 }
