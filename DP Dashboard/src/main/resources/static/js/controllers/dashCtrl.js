@@ -5,10 +5,17 @@ var sdUrl = "/sitedetails/";
 var ssUrl = "/getSitesSummary/";
 var scUrl = "/status-changes/";
 
+var nFrom = "top";
+var nAlign = "right";
+var nIcons = "";
+var nType = "info";
+var nAnimIn = "animated fadeInRight";
+var nAnimOut = "animated fadeOutUp";
+
 var markers = [];
 
 $(document).ready(function () {
-    getSensors();
+    // getSensors();
     // getDCR("Marsabit");
     // getDRS("674960");
     // getSD("674960");
@@ -27,7 +34,8 @@ function initMap() {
         mapTypeId: google.maps.MapTypeId.HYBRID
     });
 
-    getSensors();
+    // getSensors();
+    notify(nFrom, nAlign, nIcons, nType, nAnimIn, nAnimOut, "Welcome : ", "Collecting Data...");
 }
 
 function getSensors() {
@@ -64,45 +72,30 @@ function updateYield(data) {
     document.getElementById("my").textContent = data.data.yield_daily.medium_yield_daily_count;
     document.getElementById("ly").textContent = data.data.yield_daily.low_yield_daily_count;
     document.getElementById("zy").textContent = data.data.yield_daily.zero_yield_daily_count;
+
+    document.getElementById("nu").textContent = data.data.statuses["1"];
+    document.getElementById("lu").textContent = data.data.statuses["2"];
+    document.getElementById("sd").textContent = data.data.statuses["3"];
+    document.getElementById("r").textContent = data.data.statuses["4"];
+    document.getElementById("o").textContent = data.data.statuses["5"];
+    document.getElementById("xu").textContent = data.data.statuses["6"];
+
+
+    loadDevices(data);
 }
 
 function updateStatus(data) {
 
-    var nu = 0, lu = 0, sd = 0, xu = 0, r = 0, o = 0;
-
-    console.log(data);
-    for (var i = 0; i < data.data.length; i++) {
-        if (data.data[i].lastStatusId == 1){
-            ++nu;
-        } else if (data.data[i].lastStatusId == 2){
-            ++lu;
-        } else if (data.data[i].lastStatusId == 3){
-            ++xu;
-        } else if (data.data[i].lastStatusId == 4){
-            ++o;
-        } else if (data.data[i].lastStatusId == 5){
-            ++r;
-        } else if (data.data[i].lastStatusId == 6){
-            ++sd;
-        }
-    }
-
-    document.getElementById("nu").textContent = nu.toString();
-    document.getElementById("lu").textContent = lu.toString();
-    document.getElementById("sd").textContent = sd.toString();
-    document.getElementById("r").textContent = r.toString();
-    document.getElementById("o").textContent = o.toString();
-    document.getElementById("xu").textContent = xu.toString();
-
 }
 
 function loadDevices(data) {
-
-    var respObject = data.data;
+    console.log(data);
+    var respObject = data.data.sites;
     var locations = [];
     var tempLocation = [];
     var i = 0;
 
+    console.log(respObject);
     for (var key in respObject) {
         if (respObject.hasOwnProperty(key)) {
 
@@ -114,17 +107,17 @@ function loadDevices(data) {
                     '<div id="bodyContent">'+
                     '<p><b>%s</b></p>'+
                     '<p><b>Yield</b> : %s </p>'+
-                    '<p><b>Sensors</b> : %s</p>'+
+                    '<p><b>Bar Code</b> : %s</p>'+
                     '<p><b>ID </b> : %s </p>'+
                     '</div>'+
-                    '</div>', [respObject[i].site_name, respObject[i].yield_rate, respObject[i].sensors.length,
+                    '</div>', [respObject[i].site_name, respObject[i].yield_daily, respObject[i].sensor_barcode,
                     respObject[i].mwater_id]);
 
                 tempLocation.push(contentString);
                 tempLocation.push(respObject[i].site_lat);
                 tempLocation.push(respObject[i].site_lon);
                 tempLocation.push(i++);
-                tempLocation.push(data.data[i-1].mwater_id);
+                tempLocation.push(data.data.sites[i-1].mwater_id);
                 locations.push(tempLocation);
                 tempLocation = [];
             } catch (e) {
@@ -138,24 +131,25 @@ function loadDevices(data) {
     var infowindow = new google.maps.InfoWindow();
     var marker, i;
 
-    clickroute(respObject[0].site_lat, respObject[0].site_lon, respObject[0].mwater_id);
+    // clickroute(respObject[0]["site_lat"], respObject[0]["site_lon"], respObject[0]["mwater_id"]);
 
     for (i = 0; i < locations.length; i++) {
 
-        if (respObject[i].yield_rate <= 15){
+        // console.log(respObject[i]);
+        if (respObject[i].status_id == 1){
             // console.log(respObject[i].yield_rate);
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
                 map: map,
                 icon: pinSymbol('#fc5603')
             });
-        } else if(respObject[i].yield_rate > 15 && respObject[i].yield_rate <= 50){
+        } else if(respObject[i].status_id == 2){
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
                 map: map,
                 icon: pinSymbol('#fcdb03')
             });
-        } else if (respObject[i].yield_rate > 50 && respObject[i].yield_rate < 100){
+        } else if (respObject[i].status_id ==3){
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(respObject[i].site_lat, respObject[i].site_lon),
                 map: map,
@@ -179,6 +173,8 @@ function loadDevices(data) {
 
         markers.push(marker);
     }
+
+    notify(nFrom, nAlign, nIcons, "success", nAnimIn, nAnimOut, "Notification : ", "Data Collected Successfully...");
 }
 
 function reqFN(dataToSubmit, url, type){
@@ -241,4 +237,46 @@ function pinSymbol(color) {
         strokeWeight: 2,
         scale: 0.6
     };
+}
+
+function notify(from, align, icon, type, animIn, animOut, title, message){
+    $.growl({
+        icon: icon,
+        title: title,
+        message: message,
+        url: ''
+    },{
+        element: 'body',
+        type: type,
+        allow_dismiss: true,
+        placement: {
+            from: from,
+            align: align
+        },
+        offset: {
+            x: 20,
+            y: 85
+        },
+        spacing: 10,
+        z_index: 1031,
+        delay: 2500,
+        timer: 1000,
+        url_target: '_blank',
+        mouse_over: false,
+        animate: {
+            enter: animIn,
+            exit: animOut
+        },
+        icon_type: 'class',
+        template: '<div data-growl="container" class="alert" role="alert">' +
+            '<button type="button" class="close" data-growl="dismiss">' +
+            '<span aria-hidden="true">&times;</span>' +
+            '<span class="sr-only">Close</span>' +
+            '</button>' +
+            '<span data-growl="icon"></span>' +
+            '<span data-growl="title"></span>' +
+            '<span data-growl="message"></span>' +
+            '<a href="#" data-growl="url"></a>' +
+            '</div>'
+    });
 }

@@ -5,6 +5,13 @@ var sdUrl = "/sitedetails/";
 var ssUrl = "/getSitesSummary/";
 var scUrl = "/status-changes/";
 
+var nFrom = "top";
+var nAlign = "right";
+var nIcons = "";
+var nType = "info";
+var nAnimIn = "animated fadeInRight";
+var nAnimOut = "animated fadeOutUp";
+
 var siteDataChart, active_hoursChart, sensor_uptimesChart, site_uptimesChart, yield_dailyChart;
 
 var c1 =  [
@@ -33,6 +40,7 @@ $(document).ready(function () {
     getSS();
     getSC("day", 1);
     loadSiteData();
+    notify(nFrom, nAlign, nIcons, nType, nAnimIn, nAnimOut, "Analytics : ", "Collecting Data...");
 });
 
 function getSensors() {
@@ -67,6 +75,7 @@ function loadSiteData() {
     var selectBox = document.getElementById("coun");
     var mwaterid = selectBox.options[selectBox.selectedIndex].value;
     getDRS(mwaterid);
+    notify(nFrom, nAlign, nIcons, "warning", nAnimIn, nAnimOut, "Collecting Data for Meter ID : ", mwaterid);
 }
 
 function loadCountyData() {
@@ -144,6 +153,7 @@ function procSiteData(data) {
 
     loadSiteDat(labelsArray, yieldArray);
     getSD(data.data[0].mWaterId);
+    notify(nFrom, nAlign, nIcons, "success", nAnimIn, nAnimOut, "Notification : ", "Data Collected Successfully...");
 
 }
 
@@ -319,3 +329,45 @@ var donutOption = {
     },
     responsive: true
 };
+
+function notify(from, align, icon, type, animIn, animOut, title, message){
+    $.growl({
+        icon: icon,
+        title: title,
+        message: message,
+        url: ''
+    },{
+        element: 'body',
+        type: type,
+        allow_dismiss: true,
+        placement: {
+            from: from,
+            align: align
+        },
+        offset: {
+            x: 20,
+            y: 85
+        },
+        spacing: 10,
+        z_index: 1031,
+        delay: 2500,
+        timer: 1000,
+        url_target: '_blank',
+        mouse_over: false,
+        animate: {
+            enter: animIn,
+            exit: animOut
+        },
+        icon_type: 'class',
+        template: '<div data-growl="container" class="alert" role="alert">' +
+            '<button type="button" class="close" data-growl="dismiss">' +
+            '<span aria-hidden="true">&times;</span>' +
+            '<span class="sr-only">Close</span>' +
+            '</button>' +
+            '<span data-growl="icon"></span>' +
+            '<span data-growl="title"></span>' +
+            '<span data-growl="message"></span>' +
+            '<a href="#" data-growl="url"></a>' +
+            '</div>'
+    });
+}
