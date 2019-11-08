@@ -1,7 +1,7 @@
 {
   "name": "ht-flex-api-server",
   "version": "1.0.0",
-  "description": "Api Server for Hello Tractor. Postgrel Node and Express",
+  "description": "Api Server for Blue Decision Platform",
   "main": "index.js",
   "scripts": {
     "start": "node ./dist/server.js",

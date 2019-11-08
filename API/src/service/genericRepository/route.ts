@@ -21,13 +21,13 @@ export default [
     }
   },
   {
-    path: "/api/weather",
+    path: "/api/weather/",
     method: "get",
     handler: async (req: Request, res: Response) => {
-      logger.info(`collecting weather ${JSON.stringify(req.body)}`);
+      logger.info(`collecting weather ${req.query.lat}`);
 
       const generic = new GenericController();
-      let forecast = await generic.weatherForecast(req.body.lat, req.body.lon);
+      let forecast = await generic.weatherForecast(req.query.lat, req.query.lon);
 
       logger.info(`complete current weather ${forecast.currently.summary}`);
       res.send(forecast);
@@ -35,13 +35,13 @@ export default [
   },
 
   {
-    path: "/api/distance",
+    path: "/api/distance/",
     method: "get",
     handler: async (req: Request, res: Response) => {
-      logger.info(`checking distance ${JSON.stringify(req.body)}`);
+      logger.info(`checking distance ${JSON.stringify(req.query)}`);
 
       const dist = new DistanceProvider();
-      const distance = await dist.checkDistance(req.body.lat, req.body.lon);
+      const distance = await dist.checkDistance(req.query.lat, req.query.lon);
 
       const resp = {
         status: "OK",
@@ -53,13 +53,13 @@ export default [
     }
   },
   {
-    path: "/api/advisor",
+    path: "/api/advisor/",
     method: "get",
     handler: async (req: Request, res: Response) => {
-      logger.info(`checking advisor ${JSON.stringify(req.body)}`);
+      logger.info(`checking advisor ${JSON.stringify(req.query)}`);
 
       const advisor = new DistanceProvider();
-      const advice = await advisor.advisor(req.body.lat, req.body.lon);
+      const advice = await advisor.advisor(req.query.lat, req.query.lon);
 
       const resp = {
         status: "OK",

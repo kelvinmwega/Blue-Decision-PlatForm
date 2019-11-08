@@ -3,7 +3,7 @@
   "info": {
     "version": "1.0.0"
   },
-  "host": "localhost:3001",
+  "host": "54.183.222.52:3001",
   "basePath": "/api",
   "schemes": ["http"],
   "produces": ["application/json"],
@@ -19,17 +19,13 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [{
-          "collectionFormat": "multi"
-        }],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "successful operation",
             "schema": {
               "type": "object",
-              "items": {
-
-              }
+              "items": {}
             }
           },
           "400": {
@@ -39,6 +35,135 @@
         "security": [{
 
         }]
+      }
+    },
+    "/weather/": {
+      "get": {
+        "tags": [
+          "weather"
+        ],
+        "summary": "Get weather prediction for the week",
+        "description": "Get weather prediction for the week",
+        "operationId": "weekprediction",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "name": "lat",
+            "in": "query",
+            "description": "Latitude",
+            "required": true,
+            "type": "number",
+            "format": "float"
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "description": "Longitude",
+            "required": true,
+            "type": "number",
+            "format": "float"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "items": {}
+            }
+          },
+          "400": {
+            "description": "Invalid status value"
+          }
+        },
+        "security": []
+      }
+    },
+    "/distance/": {
+      "get": {
+        "tags": [
+          "analytics"
+        ],
+        "summary": "Get distance to water points",
+        "description": "Returns distance to water points from given coordinates ",
+        "operationId": "distanceapi",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "name": "lat",
+            "in": "query",
+            "description": "Latitude",
+            "required": true,
+            "type": "number",
+            "format": "float"
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "description": "Longitude",
+            "required": true,
+            "type": "number",
+            "format": "float"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "items": {}
+            }
+          },
+          "400": {
+            "description": "Invalid status value"
+          }
+        },
+        "security": []
+      }
+    },
+    "/advisor/": {
+      "get": {
+        "tags": [
+          "analytics"
+        ],
+        "summary": "Get advice to water points",
+        "description": "Gives hotest and collest day prediction of the week and distance to water points",
+        "operationId": "distanceapi",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "name": "lat",
+            "in": "query",
+            "description": "Latitude",
+            "required": true,
+            "type": "number",
+            "format": "float"
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "description": "Longitude",
+            "required": true,
+            "type": "number",
+            "format": "float"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "items": {}
+            }
+          },
+          "400": {
+            "description": "Invalid status value"
+          }
+        },
+        "security": []
       }
     }
   }
