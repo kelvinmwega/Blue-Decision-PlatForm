@@ -45,7 +45,7 @@
     "request-promise-native": "^1.0.8",
     "swagger-ui-express": "^4.1.1",
     "tsc-watch": "^4.0.0",
-    "typeorm": "^0.2.19",
+    "typeorm": "^0.2.25",
     "typescript": "^3.6.3",
     "winston": "^3.2.1"
   },
